@@ -9,7 +9,6 @@ import com.crud.modelo.Ciudad;
 import com.crud.repositorio.CiudadRepository;
 
 @Service
-@Primary
 public class CiudadServicioImplMySQL implements CiudadServicio {
 
 	private CiudadRepository repositorio;

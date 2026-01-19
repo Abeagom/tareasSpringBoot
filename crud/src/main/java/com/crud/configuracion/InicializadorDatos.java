@@ -29,7 +29,6 @@ public class InicializadorDatos implements CommandLineRunner  {
 	            ciudad.setNombre(faker.name().fullName());
 	            ciudades.add(ciudad);
 	        }
-	        ciudadRepository.guardarCIudades(ciudades);
 	}
 
 }

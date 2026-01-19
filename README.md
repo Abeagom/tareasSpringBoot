@@ -1,11 +1,11 @@
 # CRUD MVC con Thymeleaf — RA3
 
 ## 1) Datos del alumno/a
-- Entidad elegida (ej. Producto, Libro...):
+- Entidad elegida (ej. Producto, Libro...): Ciudad
 
 ## 2) Repositorio (fork) y gestión de versiones
-- Repositorio base: https://github.com/profeInformatica101/tareasSpringBoot
-- Enlace a MI fork: [PON AQUÍ EL ENLACE CUANDO LO CREES]
+- Repositorio base: https://github.com/Abeagom/tareasSpringBoot
+- Enlace a MI fork: https://github.com/Abeagom/tareasSpringBoot
 - Nº de commits realizados: (mínimo 5)
 
 ## 3) Arquitectura
