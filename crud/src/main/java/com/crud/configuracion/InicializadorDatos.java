@@ -8,14 +8,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.crud.modelo.Ciudad;
+import com.crud.servicio.CiudadServicioImplMySQL;
 import com.github.javafaker.Faker;
-
-import servicio.CiudadServicioImplMySQL;
 
 @Component
 public class InicializadorDatos implements CommandLineRunner  {
 	 @Autowired
-	    private CiudadServicioImplMySQL ciudadRepository;
+	 private CiudadServicioImplMySQL ciudadServicio;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -27,8 +26,13 @@ public class InicializadorDatos implements CommandLineRunner  {
 	        for (int i = 0; i < 10; i++) {
 	            Ciudad ciudad = new Ciudad();
 	            ciudad.setNombre(faker.name().fullName());
+	            ciudad.setComunidadAutonoma(faker.name().fullName());
+	            ciudad.setProvincia(faker.name().fullName());
+
 	            ciudades.add(ciudad);
 	        }
+	        
+	        ciudadServicio.guardarCIudades(ciudades);
 	}
 
 }

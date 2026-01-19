@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Autores</title>
+</head>
+<body>
+    <h1>Ciudades</h1>
+    <div th:each="ciudad : ${ciudades}">
+        <h2 th:text="${ciudad.nombre}">Nombre de la ciudad/h2>
+    </div>
+</body>
+</html>
+

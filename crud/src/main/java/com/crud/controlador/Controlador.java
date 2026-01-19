@@ -7,8 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.crud.modelo.Ciudad;
-
-import servicio.CiudadServicioImplMySQL;
+import com.crud.servicio.CiudadServicioImplMySQL;
 
 @Controller
 public class Controlador {
@@ -22,7 +21,7 @@ public class Controlador {
     @GetMapping("/ciudades")
     public String listado(Model model) {
         List<Ciudad> ciudades = ciudadServicio.obtenerCiudades();
-        model.addAttribute("listaCiudades", ciudades);
+        model.addAttribute("ciudades", ciudades);
         return "lista";
     }
 }
