@@ -44,4 +44,9 @@ public class CiudadServicioImplMySQL implements CiudadServicio {
 	public void eliminarCiudad(Integer id) {
 		repositorio.deleteById(id);
 	}
+
+	public void guardarCIudades(List<Ciudad> ciudades) {
+		repositorio.saveAll(ciudades);
+		
+	}
 }
