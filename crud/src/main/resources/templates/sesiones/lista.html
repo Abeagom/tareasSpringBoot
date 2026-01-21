@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Sesiones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Historial de Sesiones</h1>
+        <a th:href="@{/sesiones/nuevo}" class="btn btn-primary">+ Nueva Sesión</a>
+    </div>
+
+	<table class="table table-striped">
+	    <thead class="table-dark">
+	        <tr>
+	            <th>Fecha</th>
+	            <th>Hora</th>
+	            <th>Modalidad</th>
+	            <th>Estado</th>
+	            <th>Duración</th>
+	            <th>Motivo</th>
+	            <th class="text-center">Acciones</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr th:each="s : ${sesiones}">
+	            <td th:text="${#temporals.format(s.fechaHora, 'dd/MM/yyyy')}"></td>
+	            <td th:text="${#temporals.format(s.fechaHora, 'HH:mm')}"></td>
+	            <td th:text="${s.modalidad}"></td>
+	            <td th:text="${s.estado}"></td>
+	            <td th:text="${s.duracion} + ' min'"></td>
+	            <td th:text="${s.motivo}"></td>
+	            
+				<td class="d-flex gap-2 justify-content-center">
+				    <a th:href="@{'/sesiones/' + ${s.id}}" class="btn btn-sm btn-info text-white">Ver</a>
+				    
+				    <a th:href="@{'/sesiones/' + ${s.id} + '/editar'}" class="btn btn-sm btn-warning">Editar</a>
+				    
+				    <form th:action="@{'/sesiones/' + ${s.id} + '/borrar'}" method="post" style="display:inline;">
+				        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Borrar?')">Borrar</button>
+				    </form>
+				</td>
+	        </tr>
+	    </tbody>
+	</table>
+</body>
+</html>
