@@ -1,18 +1,20 @@
 # CRUD MVC con Thymeleaf — RA3
 
 ## 1) Datos del alumno/a
-- Entidad elegida (ej. Producto, Libro...): Ciudad
+- Entidad elegida (ej. Producto, Libro...): Sesion
 
 ## 2) Repositorio (fork) y gestión de versiones
+- Repositorio base: https://github.com/profeInformatica101/tareasSpringBoot
 - Enlace a MI fork: https://github.com/Abeagom/tareasSpringBoot
-- Nº de commits realizados: 5
+- Nº de commits realizados: 12
 
 ## 3) Arquitectura
 Explica brevemente cómo has organizado:
-- Controller:Controlador
-- Service:Interfaz CiudadServicio y clase de implementación CiudadServicioImplMySQL
-- Repository:CiudadRepository
-- Entity:Ciudad
+- Modelo: Sesion con validaciones
+- Repositorio: SesionRepository
+- Servicio: Interaz SesionService e implementación ImplSesionServiceMySQL
+- Controlador: Con rutas
+- Configuración: Archivo CSV con sesiones que se insertan al ejecutar por primera vez el proyecto
 
 ## 4) Base de datos elegida (marca una)
 - [ ] H2
@@ -20,6 +22,8 @@ Explica brevemente cómo has organizado:
 - [ ] PostgreSQL
 
 ## 5) Configuración de la base de datos
+Hay que crear BD tareasSpringBoot
+
 ### 5.1 Dependencias añadidas
 		<dependency>
 			<groupId>com.mysql</groupId>
@@ -40,6 +44,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 
 ### 5.3 Pasos para crear la BD (si aplica)
 - MySQL: CREATE DATABASE tareasSpringBoot;
+
 ## 6) Cómo ejecutar el proyecto
 1. Requisitos (Java versión, Maven/Gradle, DB instalada si aplica)
 2. Comando de arranque:
