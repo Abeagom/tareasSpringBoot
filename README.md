@@ -1,20 +1,20 @@
 # CRUD MVC con Thymeleaf — RA3
 
 ## 1) Datos del alumno/a
-- Entidad elegida (ej. Producto, Libro...): Sesion
+- Entidad elegida (ej. Producto, Libro...): Sesion. Representa una sesión de trabajo o consulta.
 
 ## 2) Repositorio (fork) y gestión de versiones
 - Repositorio base: https://github.com/profeInformatica101/tareasSpringBoot
 - Enlace a MI fork: https://github.com/Abeagom/tareasSpringBoot
-- Nº de commits realizados: 12
+- Nº de commits realizados: 14
 
 ## 3) Arquitectura
 Explica brevemente cómo has organizado:
-- Modelo: Sesion con validaciones
-- Repositorio: SesionRepository
-- Servicio: Interaz SesionService e implementación ImplSesionServiceMySQL
-- Controlador: Con rutas
-- Configuración: Archivo CSV con sesiones que se insertan al ejecutar por primera vez el proyecto
+- Modelo (Sesion): Representa la entidad Sesion. Se han aplicado Bean Validations (como @NotBlank o @NotNull).
+- Repositorio (SesionRepository): Capa de acceso a datos que extiende de JpaRepository.
+- Servicio: Interfaz (SesionService) e implementación (ImplSesionServiceMySQL).
+- Controlador (SesionController): Actúa como intermediario entre la vista y el servicio. Gestiona las rutas (endpoints).
+- Configuración (Carga de Datos CSV): Se ha implementado un componente de configuración que, al iniciar la aplicación (CommandLineRunner), detecta si la base de datos está vacía. En tal caso, lee un archivo CSV externo e inserta automáticamente los registros iniciales.
 
 ## 4) Base de datos elegida (marca una)
 - [ ] H2
@@ -43,21 +43,30 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 
 
 ### 5.3 Pasos para crear la BD (si aplica)
-- MySQL: CREATE DATABASE tareasSpringBoot;
+- CREATE DATABASE tareasSpringBoot;
 
 ## 6) Cómo ejecutar el proyecto
 1. Requisitos (Java versión, Maven/Gradle, DB instalada si aplica)
+- Java JDK: Versión 17 o superior instalada.
+- Gestor de dependencias: Maven.
+- Sistema de Gestión de Base de Datos: MySQL
+- Base de Datos: Tener creado el esquema tareasSpringBoot
 2. Comando de arranque:
    - ./mvnw spring-boot:run   (o equivalente)
 3. URL de acceso:
    - http://localhost:8080
 
 ## 7) Pantallas / Rutas MVC
-- GET /ciudades (listar)
+- GET /sesiones (listar con paginación)
+- GET /sesiones/nuevo (formulario de creación)
+- POST /sesiones (guardar nueva sesión)
+- GET /sesiones/{id} (ver detalle de una sesión)
+- GET /sesiones/{id}/editar (formulario de edición)
+- POST /sesiones/{id} (actualizar sesión existente)
+- POST /sesiones/{id}/borrar (eliminar sesión)
 
 ## 8) Mejoras extra (opcional)
-- Validaciones
-- Estilos Bootstrap
-- Búsqueda
-- Pruebas
-- Paginación
+- Validaciones: Uso de Bean Validation (@NotBlank, @NotNull, @Min, etc.)
+- Estilos con Bootstrap 5
+- Carga inicial mediante CSV
+- Prueba con DataJpaTest
