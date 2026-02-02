@@ -17,7 +17,7 @@ import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/sesiones")
-public class Controlador {
+public class SesionController {
 	
     @Autowired
     private SesionServiceImplMySQL sesionServicio;
