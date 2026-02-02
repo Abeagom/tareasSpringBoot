@@ -1,6 +1,9 @@
 package com.crud.controlador;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.crud.modelo.Sesion;
 import com.crud.servicio.SesionService;
+import com.crud.servicio.SesionServiceImplMySQL;
+
 import jakarta.validation.Valid;
 
 @Controller
@@ -15,14 +20,26 @@ import jakarta.validation.Valid;
 public class Controlador {
 	
     @Autowired
-    private SesionService sesionServicio;
+    private SesionServiceImplMySQL sesionServicio;
 
     // Listado de sesiones
-    @GetMapping
-    public String listarSesiones(Model model) {
-        model.addAttribute("sesiones", sesionServicio.listarSesiones());
-        return "sesiones/lista";
-    }
+	@GetMapping
+	public String listarSesiones(Model model,
+			@PageableDefault(size=20) Pageable page,
+			@RequestParam(required=false) String motivo) {
+		
+		Page<Sesion>sesiones;
+		if(motivo != null && !motivo.trim().isEmpty()) {
+			sesiones = sesionServicio.buscarSesionesContienenMotivo(motivo, page);
+		}else {
+			sesiones = sesionServicio.listarTodasLasSesiones(page);
+		}
+		
+		model.addAttribute("sesiones", sesiones);
+		model.addAttribute("total", sesiones.getTotalElements());
+		model.addAttribute("motivoBusqueda", motivo);
+		return "sesiones/lista";
+	}
 
     // Crear sesión
     @GetMapping("/nuevo")

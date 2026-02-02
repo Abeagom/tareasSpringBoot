@@ -44,5 +44,53 @@
 	        </tr>
 	    </tbody>
 	</table>
+	
+	<!-- Controles de paginación-->
+	<div>
+		<ul class="pagination">
+			<!-- Enlace "Inicio"-->
+			<li th:if="${sesiones.number > 0}" class="page-item">
+				<a th:href="@{/sesiones(motivo=${motivoBusqueda}, page=0)}" class="page-link">Inicio</a>
+			</li>
+			<!-- Enlace "Anterior"-->
+			<li th:if="${sesiones.hasPrevious()}" class="page-item">
+				<a th:href="@{/sesiones(motivo=${motivoBusqueda}, page=${sesiones.number - 1})}" class="page-link">Anterior</a>
+			</li>
+			
+			<!-- Enlace a la página anterior a la actual, si existe -->
+			<li th:if="${sesiones.number > 1}" class="page-item">
+			    <a th:href="@{/sesiones(nombre=${nombreBusqueda}, page=${sesiones.number - 2})}"
+			       class="page-link"
+			       th:text="${sesiones.number - 1}">
+			    </a>
+			</li>
+
+			<!-- Enlace a la página actual -->
+			<li class="page-item active">
+			    <a th:href="@{/sesiones(nombre=${nombreBusqueda}, page=${sesiones.number})}"
+			       class="page-link"
+			       th:text="${sesiones.number + 1}">
+			    </a>
+			</li>
+
+			<!-- Enlace a la página siguiente a la actual, si existe -->
+			<li th:if="${sesiones.number + 1 < sesiones.totalPages}" class="page-item">
+			    <a th:href="@{/sesiones(nombre=${nombreBusqueda}, page=${sesiones.number + 1})}"
+			       class="page-link"
+			       th:text="${sesiones.number + 2}">
+			    </a>
+			</li>
+
+			
+			<!-- Enlace "Siguiente"-->
+			<li th:if="${sesiones.hasNext()}" class="page-item">
+				<a th:href="@{/sesiones(motivo=${motivoBusqueda}, page=${sesiones.number + 1})}" class="page-link">Siguiente</a>
+			</li>
+			<!-- Enlace "Fin"-->
+			<li th:if="${sesiones.number+1 < sesiones.totalPages}" class="page-item">
+				<a th:href="@{/sesiones(motivo=${motivoBusqueda}, page=${sesiones.totalPages - 1})}" class="page-link">Fin</a>
+			</li>
+		</ul>
+	</div>
 </body>
 </html>

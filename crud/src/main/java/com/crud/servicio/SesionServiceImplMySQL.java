@@ -1,6 +1,9 @@
 package com.crud.servicio;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.crud.modelo.Sesion;
@@ -45,4 +48,12 @@ public class SesionServiceImplMySQL implements SesionService {
     public void guardarVarias(List<Sesion> sesiones) {
         repositorio.saveAll(sesiones);
     }
+    
+	public Page<Sesion> listarTodasLasSesiones(Pageable pageable ){
+		return repositorio.findAll(pageable);
+	}
+	
+	public Page<Sesion> buscarSesionesContienenMotivo (String motivo, Pageable pageable ){
+		return repositorio.findByMotivoContaining(motivo, pageable);
+	}
 }
