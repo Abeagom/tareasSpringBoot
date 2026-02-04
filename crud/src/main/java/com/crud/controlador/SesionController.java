@@ -1,6 +1,5 @@
 package com.crud.controlador;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -10,8 +9,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.crud.modelo.Sesion;
-import com.crud.servicio.SesionService;
+import com.crud.modelo.Usuario;
 import com.crud.servicio.SesionServiceImplMySQL;
+import com.crud.servicio.UsuarioService;
 
 import jakarta.validation.Valid;
 
@@ -19,8 +19,13 @@ import jakarta.validation.Valid;
 @RequestMapping("/sesiones")
 public class SesionController {
 	
-    @Autowired
     private SesionServiceImplMySQL sesionServicio;
+    private final UsuarioService usuarioServicio;
+    
+    public SesionController(SesionServiceImplMySQL sesionServicio, UsuarioService usuarioServicio) {
+        this.sesionServicio = sesionServicio;
+        this.usuarioServicio = usuarioServicio;
+      }
 
     // Listado de sesiones
 	@GetMapping
@@ -35,6 +40,9 @@ public class SesionController {
 			sesiones = sesionServicio.listarTodasLasSesiones(page);
 		}
 		
+		Usuario usuario = usuarioServicio.obtenerUsuarioConectado();
+		
+	    model.addAttribute("usuario", usuario);
 		model.addAttribute("sesiones", sesiones);
 		model.addAttribute("total", sesiones.getTotalElements());
 		model.addAttribute("motivoBusqueda", motivo);

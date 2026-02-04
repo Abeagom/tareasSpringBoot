@@ -7,6 +7,10 @@
 </head>
 <body class="container mt-5">
 
+	<div class="d-flex align-items-center">
+	    <div th:replace="~{fragmentos/usuario :: usuario}"></div>
+	    <div class="ms-auto" th:replace="~{fragmentos/logout :: logout}"></div>
+	</div>
     <div class="text-center">
         <h1>Inicio</h1>
         <hr>
