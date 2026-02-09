@@ -94,4 +94,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
     return null;
   }
+  
+  @Override
+  public Page<Usuario> buscarPorNombre(String nombre, Pageable pageable) {
+      return usuarioRepositorio.findByNombreContainingIgnoreCase(nombre, pageable);
+  }
 }

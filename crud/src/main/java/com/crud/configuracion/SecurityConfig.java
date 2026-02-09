@@ -21,82 +21,86 @@ import org.springframework.security.config.annotation.authentication.configurati
 @EnableMethodSecurity
 public class SecurityConfig {
 
-	@Bean // Acceso a AuthenticationManager
-	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-			throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-	}
+    @Bean // Acceso a AuthenticationManager
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
-	@Bean // Encriptar contraseñas
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean // Encriptar contraseñas
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-		// H2 console necesita iframes
-		http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+        // H2 console necesita iframes
+        http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
-		http.authorizeHttpRequests(auth -> auth
-				// estáticos
-				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-				// público
-				.requestMatchers("/").permitAll()
-				// H2 solo ADMIN
-//				.requestMatchers(PathRequest.toH2Console()).hasRole(Rol.ADMIN.toString())
-//				.requestMatchers("/h2-console/**", "/h2/**").hasRole(Rol.ADMIN.toString())
-//				// productos: USUARIO o ADMIN (ajústalo si quieres también MANAGER)
-				.requestMatchers("/sesiones/**").hasAnyRole(Rol.USUARIO.toString(), Rol.ADMIN.toString())
-				// el resto: autenticado
-				.anyRequest().authenticated());
+        http.authorizeHttpRequests(auth -> auth
+                // estáticos
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                // H2 solo ADMIN
+//              .requestMatchers(PathRequest.toH2Console()).hasRole(Rol.ADMIN.toString())
+//              .requestMatchers("/h2-console/**", "/h2/**").hasRole(Rol.ADMIN.toString())
+                // rutas según roles
+                .requestMatchers("/sesiones/**").hasAnyRole(Rol.USUARIO.toString(), Rol.ADMIN.toString())
+                .requestMatchers("/usuarios/**").hasAnyRole(Rol.MANAGER.toString(), Rol.ADMIN.toString())
+                // el resto: autenticado
+                .anyRequest().authenticated()
+        );
 
-//		// CSRF: desactivar solo para H2
-//		http.csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console())
-//				.ignoringRequestMatchers("/h2-console/**", "/h2/**"));
+        // login form
+        http.formLogin(form -> form
+                .loginPage("/login")
+                .usernameParameter("nombre")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+        );
 
-		// login form
-		http.formLogin(form -> form.defaultSuccessUrl("/sesiones", true).permitAll());
+        // logout (por defecto usa POST /logout)
+        http.logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+        );
 
-		// logout (por defecto usa POST /logout)
-		http.logout(logout -> logout.permitAll());
+        return http.build();
+    }
 
-		return http.build();
-	}
-
-//	@Bean
-//	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//  @Bean
+//  SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//      // H2 console necesita iframes
+//      http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 //
-//		// H2 console necesita iframes
-//		http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+//      http.authorizeHttpRequests(auth -> auth
+//              // estáticos
+//              .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 //
-//		http.authorizeHttpRequests(auth -> auth
-//				// estáticos
-//				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+//              // público
+//              .requestMatchers("/", "/saluda").permitAll()
 //
-//				// público
-//				.requestMatchers("/", "/saluda").permitAll()
+//              // H2 solo ADMIN
+//              .requestMatchers(PathRequest.toH2Console()).hasRole("ADMIN").requestMatchers("/h2-console/**", "/h2/**")
+//              .hasRole("ADMIN")
 //
-//				// H2 solo ADMIN
-//				.requestMatchers(PathRequest.toH2Console()).hasRole("ADMIN").requestMatchers("/h2-console/**", "/h2/**")
-//				.hasRole("ADMIN")
+//              // productos: USER o ADMIN
+//              .requestMatchers("/productos/**").hasAnyRole("USER", "ADMIN")
 //
-//				// productos: USER o ADMIN
-//				.requestMatchers("/productos/**").hasAnyRole("USER", "ADMIN")
+//              // el resto: autenticado
+//              .anyRequest().authenticated());
 //
-//				// el resto: autenticado
-//				.anyRequest().authenticated());
+//      // CSRF: desactivar solo para H2
+//      http.csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console())
+//              .ignoringRequestMatchers("/h2-console/**", "/h2/**"));
 //
-//		// CSRF: desactivar solo para H2
-//		http.csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console())
-//				.ignoringRequestMatchers("/h2-console/**", "/h2/**"));
+//      // login form
+//      http.formLogin(form -> form.defaultSuccessUrl("/productos", true).permitAll());
 //
-//		// login form
-//		http.formLogin(form -> form.defaultSuccessUrl("/productos", true).permitAll());
+//      http.logout(logout -> logout.permitAll());
 //
-//		http.logout(logout -> logout.permitAll());
-//
-//		return http.build();
-//	}
+//      return http.build();
+//  }
 
 }

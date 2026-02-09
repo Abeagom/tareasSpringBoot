@@ -18,4 +18,5 @@ public interface UsuarioService {
 	  Page<Usuario> listar(Pageable pageable);
 	  void eliminar(Long id);
 	  Usuario obtenerUsuarioConectado();
+	  Page<Usuario> buscarPorNombre(String nombre, Pageable pageable);
 	}

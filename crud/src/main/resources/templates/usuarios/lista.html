@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Usuarios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body class="container-fluid px-0">
+
+<div th:replace="fragmentos/header :: header"></div>
+
+<!-- Contenedor principal -->
+<div class="container">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Listado de Usuarios</h2>
+        <a th:href="@{/usuarios/nuevo}" class="btn btn-primary">+ Nuevo Usuario</a>
+    </div>
+	
+	<div th:replace="fragmentos/alertas :: alertas"></div>
+
+    <!-- Formulario de búsqueda -->
+    <form th:action="@{/usuarios}" method="get" class="mb-3 d-flex">
+        <input type="text" name="nombre" th:value="${nombreBusqueda}" class="form-control me-2"
+               placeholder="Buscar por nombre...">
+        <button type="submit" class="btn btn-outline-primary">
+            <i class="bi bi-search"></i> Buscar
+        </button>
+    </form>
+
+    <table class="table table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Rol</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${usuarios}">
+            <td th:text="${u.nombre}"></td>
+            <td th:text="${u.rol}"></td>
+			<td class="d-flex gap-2 justify-content-center">
+			    <a th:href="@{'/usuarios/' + ${u.id}}" class="btn btn-sm btn-info text-white">Ver</a>
+
+			    <a th:if="${u.rol.toString() != 'ADMIN'}" 
+			       th:href="@{'/usuarios/' + ${u.id} + '/editar'}" 
+			       class="btn btn-sm btn-warning">Editar</a>
+
+			    <form th:if="${u.rol.toString() != 'ADMIN'}" 
+			          th:action="@{'/usuarios/' + ${u.id} + '/borrar'}" 
+			          method="post" style="display:inline;">
+			        <button type="submit" class="btn btn-sm btn-danger"
+			                onclick="return confirm('¿Borrar?')">Borrar
+			        </button>
+			    </form>
+			    
+			    <span th:if="${u.rol.toString() == 'ADMIN'}" class="badge bg-secondary">Protegido</span>
+			</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Controles de paginación -->
+    <nav>
+        <ul class="pagination">
+            <li th:if="${usuarios.number > 0}" class="page-item">
+                <a th:href="@{/usuarios(nombre=${nombreBusqueda}, page=0)}" class="page-link">Inicio</a>
+            </li>
+            <li th:if="${usuarios.hasPrevious()}" class="page-item">
+                <a th:href="@{/usuarios(nombre=${nombreBusqueda}, page=${usuarios.number - 1})}" class="page-link">Anterior</a>
+            </li>
+            <li class="page-item active">
+                <a th:href="@{/usuarios(nombre=${nombreBusqueda}, page=${usuarios.number})}" class="page-link"
+                   th:text="${usuarios.number + 1}">1</a>
+            </li>
+            <li th:if="${usuarios.hasNext()}" class="page-item">
+                <a th:href="@{/usuarios(nombre=${nombreBusqueda}, page=${usuarios.number + 1})}" class="page-link">Siguiente</a>
+            </li>
+            <li th:if="${usuarios.number+1 < usuarios.totalPages}" class="page-item">
+                <a th:href="@{/usuarios(nombre=${nombreBusqueda}, page=${usuarios.totalPages - 1})}" class="page-link">Fin</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+<div th:replace="fragmentos/footer :: footer"></div>
+
+</body>
+</html>

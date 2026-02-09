@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Usuario {
@@ -15,10 +16,12 @@ public class Usuario {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotBlank(message = "El nombre es obligatorio")
   @Column(unique = true, nullable = false)
   private String nombre;
 
   @Column(nullable = false)
+  @NotBlank(message = "La contraseña es obligatoria")
   private String contrasena; // almacenada en BBDD como HASH (BCrypt)
 
   @Enumerated(EnumType.STRING)
